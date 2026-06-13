@@ -1,0 +1,178 @@
+[
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.ContractExecutionController",
+    "Method": "CheckIsFinished",
+    "RelativePath": "api/ContractExecution/checkIsFinished",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ContractorControl.Application.DTOs.InstanceDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.ContractExecutionController",
+    "Method": "Create",
+    "RelativePath": "api/ContractExecution/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ContractorControl.Application.DTOs.ContractExecutionCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.ContractExecutionController",
+    "Method": "SetFinished",
+    "RelativePath": "api/ContractExecution/setFinished",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ContractorControl.Application.DTOs.InstanceDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.CrudController",
+    "Method": "Delete",
+    "RelativePath": "api/crud/delete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "ContractorControl.Domain.Common.SetPropertyInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.CrudController",
+    "Method": "Insert",
+    "RelativePath": "api/crud/insert",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "ContractorControl.Domain.Common.SetPropertyInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.CrudController",
+    "Method": "Update",
+    "RelativePath": "api/crud/update",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "ContractorControl.Domain.Common.SetPropertyInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.InitController",
+    "Method": "Init",
+    "RelativePath": "api/Init",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "ContractorControl.Domain.Common.SecretInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.StatesController",
+    "Method": "CheckStateIsSet",
+    "RelativePath": "api/States/checkStateIsSet",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ContractorControl.Application.DTOs.CheckStateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.StatesController",
+    "Method": "CheckStateToSet",
+    "RelativePath": "api/States/checkStateToSet",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ContractorControl.Application.DTOs.CheckStateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.StatesController",
+    "Method": "GetEvents",
+    "RelativePath": "api/States/getEvents",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ContractorControl.Application.DTOs.InstanceDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ContractorControl.Api.Controllers.StatesController",
+    "Method": "SetStates",
+    "RelativePath": "api/States/setStates",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ContractorControl.Application.DTOs.SetStateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

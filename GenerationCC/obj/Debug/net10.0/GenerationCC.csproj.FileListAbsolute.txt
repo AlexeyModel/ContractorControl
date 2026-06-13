@@ -1,0 +1,14 @@
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\bin\Debug\net10.0\GenerationCC.exe
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\bin\Debug\net10.0\GenerationCC.deps.json
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\bin\Debug\net10.0\GenerationCC.runtimeconfig.json
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\bin\Debug\net10.0\GenerationCC.dll
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\bin\Debug\net10.0\GenerationCC.pdb
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.AssemblyInfoInputs.cache
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.AssemblyInfo.cs
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.csproj.CoreCompileInputs.cache
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.dll
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\refint\GenerationCC.dll
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.pdb
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.genruntimeconfig.cache
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\ref\GenerationCC.dll

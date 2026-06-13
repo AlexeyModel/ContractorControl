@@ -1,0 +1,134 @@
+﻿CREATE OR REPLACE FUNCTION contractor_control.check_state_to_set(
+    p_instance_guid uuid, p_state_name varchar, p_state_type varchar
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+    -- Переменные для Шага 1
+    v_contract_id INT;
+    v_contract_execution_id INT;
+    
+    -- Переменная для Шага 2
+    v_state_type_id INT;
+    
+    -- Переменная для Шага 3
+    v_state_id INT;
+    
+    -- Переменные для Шага 5 и 6
+    v_predecessor_ids INT[];
+    v_predecessor_id INT;
+    v_predecessor_event_count INT;
+    
+    -- Константа для проверки (статус SUCCESS) с нотацией :=
+    v_success_type_id INT := NULL;
+BEGIN
+
+    -- ==========================================================
+    -- ШАГ 1: Получение contract_id из contract_execution
+    -- ==========================================================
+    SELECT id, contract_id 
+    INTO v_contract_execution_id, v_contract_id
+    FROM contractor_control.contract_execution
+    WHERE instance_contract_execution = p_instance_guid
+        AND delete_at IS NULL
+    LIMIT 1;
+
+    -- ==========================================================
+    -- ШАГ 4: Если шаг 1 вернул пусто -> возвращаем false
+    -- ==========================================================
+    IF v_contract_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    -- ==========================================================
+    -- ШАГ 2: Получение ID типа состояния (state_type_id)
+    -- ==========================================================
+    SELECT id 
+    INTO v_state_type_id
+    FROM contractor_control.state_type
+    WHERE type = p_state_type
+        AND delete_at IS NULL
+    LIMIT 1;
+
+    -- ==========================================================
+    -- ШАГ 4: Если шаг 2 вернул пусто -> возвращаем false
+    -- ==========================================================
+    IF v_state_type_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    -- ==========================================================
+    -- ШАГ 3: Получение ID состояния (state_id)
+    -- ==========================================================
+    SELECT id 
+    INTO v_state_id
+    FROM contractor_control.states
+    WHERE contract_id = v_contract_id
+        AND state_type_id = v_state_type_id
+        AND name = p_state_name
+        AND delete_at IS NULL
+    LIMIT 1;
+
+    -- ==========================================================
+    -- ШАГ 4: Если шаг 3 вернул пусто -> возвращаем false
+    -- ==========================================================
+    IF v_state_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    -- ==========================================================
+    -- ШАГ 5: Поиск предшественников в графе DAG
+    -- ==========================================================
+    SELECT array_agg(state_source_id)
+    INTO v_predecessor_ids
+    FROM contractor_control.dags
+    WHERE state_destination_id = v_state_id
+        AND delete_at IS NULL;
+
+    -- Если предшественников нет, значит это начальный узел.
+    -- cardinality() корректно обрабатывает как NULL, так и пустой массив
+    IF v_predecessor_ids IS NULL OR cardinality(v_predecessor_ids) = 0 THEN
+        RETURN TRUE;
+    END IF;
+
+    -- ==========================================================
+    -- ШАГ 6: Цикл по массиву предшественников
+    -- ==========================================================
+    
+    -- Получаем ID для статуса 'SUCCESS' один раз перед циклом
+    SELECT id INTO v_success_type_id 
+    FROM contractor_control.state_type 
+    WHERE type = 'SUCCESS' AND delete_at IS NULL 
+    LIMIT 1;
+
+    -- Если тип 'SUCCESS' не найден в справочнике, дальнейшая проверка невозможна
+    IF v_success_type_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    -- Проходим по каждому предшественнику
+    FOREACH v_predecessor_id IN ARRAY v_predecessor_ids
+    LOOP
+        -- Проверяем наличие события SUCCESS для предшественника
+        SELECT count(*)
+        INTO v_predecessor_event_count
+        FROM contractor_control.events e
+        JOIN contractor_control.states s ON e.state_id = s.id
+        WHERE e.contract_execution_id = v_contract_execution_id
+            AND e.state_id = v_predecessor_id        
+            AND s.state_type_id = v_success_type_id  
+            AND e.delete_at IS NULL
+            AND s.delete_at IS NULL;
+
+        -- Если событие SUCCESS не найдено (count = 0), значит предшественник не завершен
+        IF v_predecessor_event_count = 0 THEN
+            RETURN FALSE;
+        END IF;
+    END LOOP;
+
+    -- ==========================================================
+    -- ШАГ 7: Если все шаги успешны -> true
+    -- ==========================================================
+    RETURN TRUE;
+
+END;
+$$ LANGUAGE plpgsql;
