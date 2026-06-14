@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\absmo\\projects\\ContractorControl3\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{8D0AEBBF-C7E4-4D08-B240-6EE43977A75B}|GenerationCC\\GenerationCC.csproj|c:\\users\\absmo\\projects\\contractorcontrol3\\generationcc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D0AEBBF-C7E4-4D08-B240-6EE43977A75B}|GenerationCC\\GenerationCC.csproj|solutionrelative:generationcc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|c:\\users\\absmo\\projects\\contractorcontrol3\\contractorcontrol\\api\\controllers\\statescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|solutionrelative:contractorcontrol\\api\\controllers\\statescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|c:\\users\\absmo\\projects\\contractorcontrol3\\contractorcontrol\\application\\handlers\\businesshandlers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|solutionrelative:contractorcontrol\\application\\handlers\\businesshandlers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|c:\\users\\absmo\\projects\\contractorcontrol3\\contractorcontrol\\domain\\entities\\contract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|solutionrelative:contractorcontrol\\domain\\entities\\contract.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|c:\\users\\absmo\\projects\\contractorcontrol3\\contractorcontrol\\api\\controllers\\statescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|solutionrelative:contractorcontrol\\api\\controllers\\statescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-1234-56789ABCDEF0}|ContractorControl\\ContractorControl.csproj|c:\\users\\absmo\\projects\\contractorcontrol3\\contractorcontrol\\infrastructure\\services\\crudservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -75,45 +79,55 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\GenerationCC\\Program.cs",
+              "RelativeDocumentMoniker": "GenerationCC\\Program.cs",
+              "ToolTip": "C:\\Users\\absmo\\projects\\ContractorControl3\\GenerationCC\\Program.cs",
+              "RelativeToolTip": "GenerationCC\\Program.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAUwK0AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T21:26:12.422Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "BusinessHandlers.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Application\\Handlers\\BusinessHandlers.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Application\\Handlers\\BusinessHandlers.cs",
               "ToolTip": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Application\\Handlers\\BusinessHandlers.cs",
               "RelativeToolTip": "ContractorControl\\Application\\Handlers\\BusinessHandlers.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAACgAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-13T08:20:01.144Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-13T08:20:01.144Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "QueryHandlers.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Application\\Handlers\\QueryHandlers.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Application\\Handlers\\QueryHandlers.cs",
               "ToolTip": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Application\\Handlers\\QueryHandlers.cs",
               "RelativeToolTip": "ContractorControl\\Application\\Handlers\\QueryHandlers.cs",
-              "ViewState": "AgIAAHcAAAAAAAAAAAAWwIAAAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAmwCUAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-13T08:28:16.645Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-13T08:28:16.645Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "StatesController.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Api\\Controllers\\StatesController.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Api\\Controllers\\StatesController.cs",
               "ToolTip": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Api\\Controllers\\StatesController.cs",
               "RelativeToolTip": "ContractorControl\\Api\\Controllers\\StatesController.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAA1wBkAAABOAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAqwBYAAABWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-12T13:57:19.685Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T13:57:19.685Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "Contract.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Domain\\Entities\\Contract.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Domain\\Entities\\Contract.cs",
@@ -121,12 +135,11 @@
               "RelativeToolTip": "ContractorControl\\Domain\\Entities\\Contract.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-10T20:16:17.104Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-10T20:16:17.104Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "StateConfiguration.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Infrastructure\\Configurations\\StateConfiguration.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Infrastructure\\Configurations\\StateConfiguration.cs",
@@ -134,12 +147,11 @@
               "RelativeToolTip": "ContractorControl\\Infrastructure\\Configurations\\StateConfiguration.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-10T20:09:11.879Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-10T20:09:11.879Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "SetProperty.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Domain\\Common\\SetProperty.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Domain\\Common\\SetProperty.cs",
@@ -147,12 +159,11 @@
               "RelativeToolTip": "ContractorControl\\Domain\\Common\\SetProperty.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAUAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-08T19:52:25.172Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-08T19:52:25.172Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "CrudService.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Infrastructure\\Services\\CrudService.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Infrastructure\\Services\\CrudService.cs",
@@ -160,12 +171,11 @@
               "RelativeToolTip": "ContractorControl\\Infrastructure\\Services\\CrudService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-08T19:12:04.852Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-08T19:12:04.852Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\appsettings.json",
               "RelativeDocumentMoniker": "ContractorControl\\appsettings.json",
@@ -177,7 +187,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Infrastructure\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Infrastructure\\Data\\ApplicationDbContext.cs",
@@ -185,12 +195,11 @@
               "RelativeToolTip": "ContractorControl\\Infrastructure\\Data\\ApplicationDbContext.cs",
               "ViewState": "AgIAAC4AAAAAAAAAAAAIwDQAAABbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-03T06:48:51.043Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-03T06:48:51.043Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "BusinessQueries.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Application\\Queries\\BusinessQueries.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Application\\Queries\\BusinessQueries.cs",
@@ -198,12 +207,11 @@
               "RelativeToolTip": "ContractorControl\\Application\\Queries\\BusinessQueries.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAkAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-13T08:19:28.111Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-13T08:19:28.111Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\absmo\\projects\\ContractorControl3\\ContractorControl\\Program.cs",
               "RelativeDocumentMoniker": "ContractorControl\\Program.cs",
@@ -211,8 +219,7 @@
               "RelativeToolTip": "ContractorControl\\Program.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAWwBMAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-07T20:09:42.316Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-07T20:09:42.316Z"
             }
           ]
         }

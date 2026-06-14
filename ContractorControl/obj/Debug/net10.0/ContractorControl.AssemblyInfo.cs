@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ContractorControl")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57b92cf54f5a3a71e9e60afe433c81c45d3b127f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ContractorControl")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ContractorControl")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,0 +1,94 @@
+﻿CREATE OR REPLACE FUNCTION contractor_control.check_state_to_set(
+    p_instance_guid uuid, 
+    p_state_name character varying, 
+    p_state_type character varying
+)
+ RETURNS boolean
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    v_contract_id INT;
+    v_contract_execution_id INT;
+    v_state_type_id INT;
+    v_state_id INT;
+    v_actual_state_type_id INT;
+    v_has_unresolved_predecessors BOOLEAN;
+BEGIN
+
+    -- ИСПРАВЛЕНИЕ: Если тип входного параметра явно равен 'GLOBAL',
+    -- мы СРАЗУ возвращаем TRUE, не проверяя наличие контракта и записи в states.
+    IF p_state_type = 'GLOBAL' THEN
+        RETURN TRUE;
+    END IF;
+
+    -- ==========================================================
+    -- Остальной код выполняется только для НЕглобальных статусов
+    -- ==========================================================
+
+    -- 1. Получаем contract_id и contract_execution_id
+    SELECT id, contract_id 
+    INTO v_contract_execution_id, v_contract_id
+    FROM contractor_control.contract_execution
+    WHERE instance_contract_execution = p_instance_guid
+        AND delete_at IS NULL
+    LIMIT 1;
+
+    IF v_contract_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    -- 2. Получаем ID типа целевого состояния из справочника
+    SELECT id 
+    INTO v_state_type_id
+    FROM contractor_control.state_type
+    WHERE type = p_state_type
+        AND delete_at IS NULL
+    LIMIT 1;
+
+    IF v_state_type_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    -- 3. Получаем ID самого целевого состояния
+    SELECT id, state_type_id
+    INTO v_state_id, v_actual_state_type_id
+    FROM contractor_control.states
+    WHERE contract_id = v_contract_id
+        AND state_type_id = v_state_type_id
+        AND name = p_state_name
+        AND delete_at IS NULL
+    LIMIT 1;
+
+    IF v_state_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
+    -- Дополнительная проверка на случай, если в базу зашит id=1, 
+    -- но тип пришел не как 'GLOBAL' текстовым параметром
+    IF v_actual_state_type_id = 1 THEN
+        RETURN TRUE;
+    END IF;
+
+    -- 5. Проверка DAG
+    SELECT EXISTS (
+        SELECT 1 
+        FROM contractor_control.dags d
+        WHERE d.state_destination_id = v_state_id
+          AND d.delete_at IS NULL
+          AND NOT EXISTS (
+              SELECT 1 
+              FROM contractor_control.events e
+              WHERE e.state_id = d.state_source_id
+                AND e.contract_execution_id = v_contract_execution_id
+                AND e.delete_at IS NULL
+          )
+    ) INTO v_has_unresolved_predecessors;
+
+    IF v_has_unresolved_predecessors THEN
+        RETURN FALSE;
+    END IF;
+
+    RETURN TRUE;
+
+END;
+$function$;

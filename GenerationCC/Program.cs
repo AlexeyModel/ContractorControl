@@ -1,155 +1,223 @@
-﻿using System.Security.Cryptography;
-using System.Text.Json.Nodes;
+﻿using Npgsql;
 
-// ==========================================
-// generation_cc - Key Generator Utility
-// ==========================================
-
-if (args.Length == 0)
+namespace GenerationCC
 {
-    PrintHelp();
-    return;
-}
-
-try
-{
-    switch (args)
+    class Program
     {
-        case ["-new"]:
-            GenerateAndPrintKey();
-            break;
-
-        case ["-f", var path, "-update"]:
-            await UpdateKeyInFileAsync(path);
-            break;
-
-        case ["-h"] or ["--help"] or ["help"]:
-            PrintHelp();
-            break;
-
-        default:
-            PrintError($"Unknown command: {string.Join(' ', args)}");
-            PrintHelp();
-            break;
-    }
-}
-catch (Exception ex)
-{
-    PrintError(ex.Message);
-}
-
-// ==========================================
-// Logic Implementation
-// ==========================================
-
-static void GenerateAndPrintKey()
-{
-    string newKey = GenerateSecretKey();
-    Console.WriteLine(newKey);
-}
-
-static async Task UpdateKeyInFileAsync(string filePath)
-{
-    if (!File.Exists(filePath))
-    {
-        throw new FileNotFoundException($"File not found: {filePath}");
-    }
-
-    // Чтение файла с сохранением переносов строк (для кроссплатформенности)
-    string jsonContent = await File.ReadAllTextAsync(filePath);
-
-    // Парсинг JSON
-    var node = JsonNode.Parse(jsonContent,
-        nodeOptions: new JsonNodeOptions { PropertyNameCaseInsensitive = true });
-
-    if (node is null)
-    {
-        throw new InvalidOperationException("Failed to parse JSON file.");
-    }
-
-    // Генерация нового ключа
-    string newKey = GenerateSecretKey();
-
-    // Поиск и обновление ключа
-    // Поддержка как корневого объекта, так и вложенных секций (например, ConnectionStrings)
-    bool updated = TryUpdateNode(node, newKey);
-
-    if (!updated)
-    {
-        throw new KeyNotFoundException("Key 'SecretKey' not found in the JSON structure.");
-    }
-
-    // Сохранение изменений с сохранением форматирования
-    var options = new System.Text.Json.JsonSerializerOptions
-    {
-        WriteIndented = true
-    };
-
-    string newJsonContent = node.ToJsonString(options);
-
-    // Замена стандартных Escape-последовательностей для чистоты файла (опционально)
-    // newJsonContent = newJsonContent.Replace("\\u0022", "\""); 
-
-    await File.WriteAllTextAsync(filePath, newJsonContent);
-
-    Console.WriteLine($"Success! 'SecretKey' updated in: {Path.GetFullPath(filePath)}");
-    Console.WriteLine($"New Key: {newKey}");
-}
-
-static bool TryUpdateNode(JsonNode node, string newValue)
-{
-    // Если это объект, ищем свойство SecretKey
-    if (node is JsonObject obj)
-    {
-        if (obj.ContainsKey("SecretKey"))
+        class StateInfo
         {
-            obj["SecretKey"] = newValue;
-            return true;
+            public string Name { get; set; } = string.Empty;
+            public string Type { get; set; } = string.Empty;
+
+            public override string ToString() => $"'{Name}' с типом '{Type}'";
         }
 
-        // Рекурсивный поиск в дочерних объектах
-        foreach (var property in obj)
+        class Dependency
         {
-            if (property.Value is not null && TryUpdateNode(property.Value, newValue))
+            public StateInfo Parent { get; set; } = new();
+            public StateInfo Child { get; set; } = new();
+        }
+
+        class StackItem
+        {
+            public int IndentLevel { get; set; }
+            public StateInfo State { get; set; } = new();
+        }
+
+        static async Task<int> Main(string[] args)
+        {
+            if (args.Length < 3)
             {
-                return true;
+                Console.WriteLine("Использование: DagLoader <ConnectionString> <ContractId> <FilePath>");
+                Console.WriteLine("Пример: DagLoader \"Host=localhost;Username=postgres;Password=secret;Database=my_db\" 42 \"my_dag.txt\"");
+                return 1;
+            }
+
+            string connectionString = args[0];
+            if (!int.TryParse(args[1], out int contractId))
+            {
+                Console.WriteLine("[!] Ошибка: ContractId должен быть числом.");
+                return 1;
+            }
+            string filePath = args[2];
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"[!] Ошибка: Файл '{filePath}' не найден.");
+                return 1;
+            }
+
+            Console.WriteLine($"[*] Чтение и анализ файла: {filePath}");
+            List<Dependency> dependencies = ParseDagFile(filePath);
+
+            if (dependencies.Count == 0)
+            {
+                Console.WriteLine("[!] В файле не обнаружено связей или файл пуст.");
+                return 0;
+            }
+
+            await LoadDagToDatabaseAsync(connectionString, contractId, dependencies);
+            return 0;
+        }
+
+        private static List<Dependency> ParseDagFile(string filePath)
+        {
+            var dependencies = new List<Dependency>();
+            var stack = new Stack<StackItem>();
+
+            foreach (var line in File.ReadLines(filePath))
+            {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+
+                string trimmedLine = line.TrimEnd();
+                int indentLevel = trimmedLine.Length - trimmedLine.TrimStart().Length;
+                string rawContent = trimmedLine.Trim();
+
+                string[] parts = rawContent.Split(new[] { '-' }, 2);
+                if (parts.Length < 2)
+                {
+                    Console.WriteLine($"[!] Пропущена некорректная строка (нет дефиса): '{rawContent}'");
+                    continue;
+                }
+
+                var stateInfo = new StateInfo
+                {
+                    Name = parts[0].Trim(),
+                    Type = parts[1].Trim()
+                };
+
+                while (stack.Count > 0 && stack.Peek().IndentLevel >= indentLevel)
+                {
+                    stack.Pop();
+                }
+
+                if (stack.Count > 0)
+                {
+                    dependencies.Add(new Dependency
+                    {
+                        Parent = stack.Peek().State,
+                        Child = stateInfo
+                    });
+                }
+
+                stack.Push(new StackItem { IndentLevel = indentLevel, State = stateInfo });
+            }
+
+            return dependencies;
+        }
+
+        private static async Task LoadDagToDatabaseAsync(string connectionString, int contractId, List<Dependency> dependencies)
+        {
+            int insertedCount = 0;
+
+            // HashSet для сбора уникальных названий состояний, которые отсутствуют в БД
+            var missingStatesReport = new HashSet<string>();
+
+            try
+            {
+                await using var conn = new NpgsqlConnection(connectionString);
+                await conn.OpenAsync();
+                Console.WriteLine($"[*] Подключение успешно. Обработка связей для contract_id: {contractId}\n");
+
+                string selectStateSql = @"
+                    SELECT s.id 
+                    FROM contractor_control.states s
+                    JOIN contractor_control.state_type t ON s.state_type_id = t.id
+                    WHERE s.contract_id = @contract_id 
+                      AND s.name = @name 
+                      AND t.type = @type
+                      AND s.delete_at IS NULL 
+                      AND t.delete_at IS NULL
+                    LIMIT 1;";
+
+                string insertDagSql = @"
+                    INSERT INTO contractor_control.dags (state_source_id, state_destination_id, create_at)
+                    VALUES (@source_id, @dest_id, NOW())
+                    ON CONFLICT (state_source_id, state_destination_id) WHERE (delete_at IS NULL) 
+                    DO NOTHING;";
+
+                await using var transaction = await conn.BeginTransactionAsync();
+
+                foreach (var dep in dependencies)
+                {
+                    int? parentId = null;
+                    int? childId = null;
+
+                    // 1. Поиск родителя
+                    await using (var cmd = new NpgsqlCommand(selectStateSql, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("contract_id", contractId);
+                        cmd.Parameters.AddWithValue("name", dep.Parent.Name);
+                        cmd.Parameters.AddWithValue("type", dep.Parent.Type);
+                        var result = await cmd.ExecuteScalarAsync();
+                        if (result != null && result != DBNull.Value) parentId = Convert.ToInt32(result);
+                    }
+
+                    // 2. Поиск потомка
+                    await using (var cmd = new NpgsqlCommand(selectStateSql, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("contract_id", contractId);
+                        cmd.Parameters.AddWithValue("name", dep.Child.Name);
+                        cmd.Parameters.AddWithValue("type", dep.Child.Type);
+                        var result = await cmd.ExecuteScalarAsync();
+                        if (result != null && result != DBNull.Value) childId = Convert.ToInt32(result);
+                    }
+
+                    // Логируем ошибки в отчет, если что-то не нашли
+                    if (!parentId.HasValue)
+                    {
+                        missingStatesReport.Add(dep.Parent.ToString());
+                    }
+                    if (!childId.HasValue)
+                    {
+                        missingStatesReport.Add(dep.Child.ToString());
+                    }
+
+                    // Если одного из узлов нет, связь физически невозможно создать
+                    if (!parentId.HasValue || !childId.HasValue)
+                    {
+                        continue;
+                    }
+
+                    // 3. Запись связи в dags
+                    await using (var cmd = new NpgsqlCommand(insertDagSql, conn, transaction))
+                    {
+                        cmd.Parameters.AddWithValue("source_id", parentId.Value);
+                        cmd.Parameters.AddWithValue("dest_id", childId.Value);
+
+                        int rowsAffected = await cmd.ExecuteNonQueryAsync();
+                        if (rowsAffected > 0)
+                        {
+                            insertedCount++;
+                            Console.WriteLine($"[+] Создана связь: {dep.Parent.Name} -> {dep.Child.Name}");
+                        }
+                    }
+                }
+
+                await transaction.CommitAsync();
+
+                // Финальные итоги в консоли
+                Console.WriteLine($"\n[└─] Успешно добавлено новых связей: {insertedCount}");
+
+                // Вывод детального лога ошибок, если они были обнаружены
+                if (missingStatesReport.Count > 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"\n[!] ВНИМАНИЕ: Обнаружено {missingStatesReport.Count} состояний, которых нет в таблице 'states':");
+                    foreach (var missingState in missingStatesReport.OrderBy(x => x))
+                    {
+                        Console.WriteLine($"   - {missingState}");
+                    }
+                    Console.ResetColor();
+                    Console.WriteLine("\n[💡] Связи для этих состояний не были записаны в dags. Сначала добавьте их в базу.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"\n[!] Критическая ошибка БД: {ex.Message}");
+                Console.ResetColor();
             }
         }
     }
-
-    return false;
-}
-
-static string GenerateSecretKey()
-{
-    // Генерация криптографически стойкого ключа (256 бит = 32 байта)
-    // Кодируем в Base64 для использования в конфигурации
-    byte[] bytes = RandomNumberGenerator.GetBytes(32);
-    return Convert.ToBase64String(bytes);
-}
-
-static void PrintHelp()
-{
-    string exeName = "generation_cc";
-
-    Console.WriteLine($@"
-Usage:
-  {exeName} -new
-      Generate a new secret key and print to console.
-
-  {exeName} -f <path_url> -update
-      Update the 'SecretKey' value in the specified JSON file.
-
-Options:
-  -new         Generate key mode.
-  -f           File path mode.
-  -update      Action to update the key in the file.
-");
-}
-
-static void PrintError(string message)
-{
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine($"Error: {message}");
-    Console.ResetColor();
 }

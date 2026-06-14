@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "FsJ7SD7d6LM=",
+  "dgSpecHash": "yvp/Q4sDi8o=",
   "success": true,
   "projectFilePath": "C:\\Users\\absmo\\projects\\ContractorControl3\\GenerationCC\\GenerationCC.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\absmo\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0\\microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512",
+    "C:\\Users\\absmo\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.0\\microsoft.extensions.logging.abstractions.10.0.0.nupkg.sha512",
+    "C:\\Users\\absmo\\.nuget\\packages\\npgsql\\10.0.2\\npgsql.10.0.2.nupkg.sha512"
+  ],
   "logs": []
 }
