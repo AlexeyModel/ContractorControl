@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GenerationCC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+319b386c38342d13be007392ca4ddd0cfd745d01")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+522f5181a98f4ea0d3d9ae3afafe8e0624015f4a")]
 [assembly: System.Reflection.AssemblyProductAttribute("GenerationCC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GenerationCC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

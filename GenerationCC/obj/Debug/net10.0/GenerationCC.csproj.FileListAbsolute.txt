@@ -12,3 +12,8 @@ C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\refint
 C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.pdb
 C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.genruntimeconfig.cache
 C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\ref\GenerationCC.dll
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\bin\Debug\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\bin\Debug\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\bin\Debug\net10.0\Npgsql.dll
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\GenerationCC.csproj.AssemblyReference.cache
+C:\Users\absmo\projects\ContractorControl3\GenerationCC\obj\Debug\net10.0\Generati.32D42D67.Up2Date

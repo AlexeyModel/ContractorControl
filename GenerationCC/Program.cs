@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using System.Text;
+using Npgsql;
 
 namespace GenerationCC
 {
@@ -109,8 +110,6 @@ namespace GenerationCC
         private static async Task LoadDagToDatabaseAsync(string connectionString, int contractId, List<Dependency> dependencies)
         {
             int insertedCount = 0;
-
-            // HashSet для сбора уникальных названий состояний, которые отсутствуют в БД
             var missingStatesReport = new HashSet<string>();
 
             try
@@ -120,21 +119,21 @@ namespace GenerationCC
                 Console.WriteLine($"[*] Подключение успешно. Обработка связей для contract_id: {contractId}\n");
 
                 string selectStateSql = @"
-                    SELECT s.id 
-                    FROM contractor_control.states s
-                    JOIN contractor_control.state_type t ON s.state_type_id = t.id
-                    WHERE s.contract_id = @contract_id 
-                      AND s.name = @name 
-                      AND t.type = @type
-                      AND s.delete_at IS NULL 
-                      AND t.delete_at IS NULL
-                    LIMIT 1;";
+                SELECT s.id 
+                FROM contractor_control.states s
+                JOIN contractor_control.state_type t ON s.state_type_id = t.id
+                WHERE s.contract_id = @contract_id 
+                    AND s.name = @name 
+                    AND t.type = @type
+                    AND s.delete_at IS NULL 
+                    AND t.delete_at IS NULL
+                LIMIT 1;";
 
                 string insertDagSql = @"
-                    INSERT INTO contractor_control.dags (state_source_id, state_destination_id, create_at)
-                    VALUES (@source_id, @dest_id, NOW())
-                    ON CONFLICT (state_source_id, state_destination_id) WHERE (delete_at IS NULL) 
-                    DO NOTHING;";
+                INSERT INTO contractor_control.dags (state_source_id, state_destination_id, create_at)
+                VALUES (@source_id, @dest_id, NOW())
+                ON CONFLICT (state_source_id, state_destination_id) WHERE (delete_at IS NULL) 
+                DO NOTHING;";
 
                 await using var transaction = await conn.BeginTransactionAsync();
 
@@ -163,21 +162,10 @@ namespace GenerationCC
                         if (result != null && result != DBNull.Value) childId = Convert.ToInt32(result);
                     }
 
-                    // Логируем ошибки в отчет, если что-то не нашли
-                    if (!parentId.HasValue)
-                    {
-                        missingStatesReport.Add(dep.Parent.ToString());
-                    }
-                    if (!childId.HasValue)
-                    {
-                        missingStatesReport.Add(dep.Child.ToString());
-                    }
+                    if (!parentId.HasValue) missingStatesReport.Add(dep.Parent.ToString());
+                    if (!childId.HasValue) missingStatesReport.Add(dep.Child.ToString());
 
-                    // Если одного из узлов нет, связь физически невозможно создать
-                    if (!parentId.HasValue || !childId.HasValue)
-                    {
-                        continue;
-                    }
+                    if (!parentId.HasValue || !childId.HasValue) continue;
 
                     // 3. Запись связи в dags
                     await using (var cmd = new NpgsqlCommand(insertDagSql, conn, transaction))
@@ -195,21 +183,35 @@ namespace GenerationCC
                 }
 
                 await transaction.CommitAsync();
-
-                // Финальные итоги в консоли
                 Console.WriteLine($"\n[└─] Успешно добавлено новых связей: {insertedCount}");
 
-                // Вывод детального лога ошибок, если они были обнаружены
+                // Обработка и сохранение ошибок
                 if (missingStatesReport.Count > 0)
                 {
+                    // Имя файла формируется на основе текущей даты: errors_2026-06-14.log
+                    string logFileName = $"errors_{DateTime.Now:yyyy-MM-dd}.log";
+                    var orderedErrors = missingStatesReport.OrderBy(x => x).ToList();
+
+                    // Вывод предупреждения в консоль
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"\n[!] ВНИМАНИЕ: Обнаружено {missingStatesReport.Count} состояний, которых нет в таблице 'states':");
-                    foreach (var missingState in missingStatesReport.OrderBy(x => x))
-                    {
-                        Console.WriteLine($"   - {missingState}");
-                    }
+                    Console.WriteLine($"\n[!] ВНИМАНИЕ: Обнаружено {orderedErrors.Count} отсутствующих состояний.");
+                    Console.WriteLine($"[*] Подробный лог дозаписан в файл: {Path.GetFullPath(logFileName)}");
                     Console.ResetColor();
-                    Console.WriteLine("\n[💡] Связи для этих состояний не были записаны в dags. Сначала добавьте их в базу.");
+
+                    // Формирование структуры лога
+                    var logContent = new StringBuilder();
+                    logContent.AppendLine($"--- Запуск импорта: {DateTime.Now:yyyy-MM-dd HH:mm:ss} ---");
+                    logContent.AppendLine($"Contract ID: {contractId}");
+                    logContent.AppendLine("Состояния, не найденные в таблице 'states':");
+                    foreach (var missingState in orderedErrors)
+                    {
+                        logContent.AppendLine($"  - {missingState}");
+                    }
+                    logContent.AppendLine("--------------------------------------------------\n");
+
+                    // AppendAllTextAsync автоматически создает файл, если его нет, 
+                    // или дописывает в конец, если файл уже существует.
+                    await File.AppendAllTextAsync(logFileName, logContent.ToString(), Encoding.UTF8);
                 }
             }
             catch (Exception ex)
