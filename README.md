@@ -1,4 +1,4 @@
-**📄Contractor Control service (documentation) **
+## Contractor Control service (documentation)
 
 Contract Execution Registration Service for Event-Driven Orchestration of Microservices Based on the DAG (Directed Acyclic Graph) Model (p. 1).
 
