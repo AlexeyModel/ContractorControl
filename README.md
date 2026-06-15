@@ -165,3 +165,138 @@ This file will automatically generate the following directed edges in the dags t
 **Next Steps**
 
 What will be our next step? I can prepare detailed **SQL migration scripts** for manual population of directories or provide examples of **JSON payloads for integrating** your microservices with the setStates endpoints.
+
+# ContractorControl API Integration Payloads
+
+This document provides complete JSON payload examples for integrating your distributed microservices with the **ContractorControl** API endpoints.
+
+---
+
+## 1. Create a Contract Execution Instance
+Called at the very beginning of a business process (e.g., by an API Gateway or Order Service) to initialize the flow and obtain a unique tracking GUID.
+
+*   **Method**: `POST`
+*   **Endpoint**: `api/ContractExecution/create`
+*   **Input DTO**: `ContractExecutionCreateDto`
+
+### Request Body
+```json
+{
+  "Code": "order_processing"
+}
+```
+
+### Expected Response (`InstanceDto`)
+```json
+{
+  "status": 200,
+  "message": "Execution instance created successfully.",
+  "data": {
+    "InstanceContractExecution": "e1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+  }
+}
+```
+> **Note:** This generated GUID must be passed down to all subsequent microservices via event broker headers or request payloads to keep track of the process execution.
+
+---
+
+## 2. Register an Event (State Transition)
+Called by each microservice as soon as it finishes its specific task. The system runs the DAG validation algorithm to ensure all preceding steps have been completed before appending this event to the journal.
+
+*   **Method**: `POST`
+*   **Endpoint**: `api/States/setStates`
+*   **Input DTO**: `SetStateDto`
+
+### Example A: Registering a standard processing stage (e.g., Inventory Service)
+```json
+{
+  "InstanceContractExecution": "e1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+  "StateName": "CheckInventory",
+  "StateType": "RUN"
+}
+```
+
+### Example B: Registering a successful state completion (e.g., Payment Service)
+```json
+{
+  "InstanceContractExecution": "e1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+  "StateName": "PaymentSuccess",
+  "StateType": "SUCCESS"
+}
+```
+
+---
+
+## 3. Pre-check: Can a State Be Set? (Predicate Check)
+Used when a microservice wants to check with ContractorControl whether its prerequisites in the DAG graph are met before starting heavy background or database processing.
+
+*   **Method**: `POST`
+*   **Endpoint**: `api/States/checkStateToSet`
+*   **Input DTO**: `CheckStateDto`
+
+### Request Body
+```json
+{
+  "InstanceContractExecution": "e1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+  "StateName": "ShipOrder",
+  "StateType": "RUN"
+}
+```
+
+### Expected Response (`ApiResponse`)
+```json
+{
+  "status": 200,
+  "message": "Success",
+  "data": true
+}
+```
+
+---
+
+## 4. Verification: Is the Contract Finished?
+Used by polling clients, monitoring dashboards, or notification services to verify if the contract execution instance has successfully reached the `FINISHED` global milestone.
+
+*   **Method**: `POST`
+*   **Endpoint**: `api/ContractExecution/checkIsFinished`
+*   **Input DTO**: `InstanceDto`
+
+### Request Body
+```json
+{
+  "InstanceContractExecution": "e1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+}
+```
+
+---
+
+## 5. Administrative Configuration (Generic Reflection-based CRUD)
+Payloads used by administrators to modify process topology dynamically via the `CrudController`. This maps properties directly to database columns and requires a secure application key.
+
+*   **Method**: `POST`
+*   **Endpoints**: `api/crud/insert`, `api/crud/update`, `api/crud/delete`
+*   **Input Container Model**: `SetPropertyInfo`
+
+### Example A: Creating a new transition dependency (DAG Edge) between two states
+```json
+{
+  "TableName": "dags",
+  "SecretKey": "SuperSecretKey123",
+  "Data": {
+    "state_source_id": 12,
+    "state_destination_id": 15
+  }
+}
+```
+
+### Example B: Adding a brand new contract template code to the registry
+```json
+{
+  "TableName": "contracts",
+  "SecretKey": "SuperSecretKey123",
+  "Data": {
+    "code": "vendor_delivery"
+  }
+}
+```
+
