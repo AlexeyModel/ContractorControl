@@ -300,3 +300,19 @@ Payloads used by administrators to modify process topology dynamically via the `
 }
 ```
 
+# ContractorControl
+
+**ContractorControl** is a modern **microservices orchestration** platform built on the principles of **Clean Architecture**. It serves as an **event-driven orchestration** system and a **passive registrar** for **business process tracking**, offering a lightweight **BPM alternative** (such as Camunda).
+
+The core of the system relies on a **DAG (Directed Acyclic Graph)** model to ensure a **deterministic process** without cycles. To achieve maximum performance, **state validation** is handled via optimized **stored procedures** on the database side.
+
+### Technology Stack
+* **Backend:** **.NET 10** / **dotnet10**, **C#**, **ASP.NET Core API**
+* **Architecture Patterns:** **MediatR (CQRS library)**
+* **Data Layer:** **PostgreSQL**, **EF Core (Entity Framework Core)**
+* **Deployment & Tools:** **Docker Compose**, **Swagger UI**
+
+### Key Components
+* **Dynamic CRUD:** A universal service for dynamic data management (`insert`, `update`, `delete`).
+* **GenerationCC:** A dedicated **CLI graph generator** for building graph connections.
+
