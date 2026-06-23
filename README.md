@@ -2,9 +2,9 @@
 
 **ContractorControl** is a modern **microservices orchestration** platform built on the principles of **Clean Architecture**. It serves as an **event-driven orchestration** system and a **passive registrar** for **business process tracking**, offering a lightweight **BPM alternative** (such as Camunda).
 
-The platform is ideal for high-throughput distributed systems, data pipelines, and strict sequential approvals where process determinism is critical.
-
 The core of the system relies on a **DAG (Directed Acyclic Graph)** model to ensure a **deterministic process** without cycles. To achieve maximum performance, **state validation** is handled via optimized **stored procedures** on the database side.
+
+The platform is ideal for high-throughput distributed systems, data pipelines, and strict sequential approvals where process determinism is critical.
 
 ### Technology Stack
 * **Backend:** **.NET 10** / **dotnet10**, **C#**, **ASP.NET Core API**
