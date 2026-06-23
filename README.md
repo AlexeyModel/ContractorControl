@@ -1,4 +1,4 @@
-# Contractor Control
+# ContractorControl
 
 **ContractorControl** is a modern **microservices orchestration** platform built on the principles of **Clean Architecture**. It serves as an **event-driven orchestration** system and a **passive registrar** for **business process tracking**, offering a lightweight **BPM alternative** (such as Camunda).
 
