@@ -158,15 +158,20 @@ dotnet run --project GenerationCC -- "Host=localhost;Database=contractordb;Usern
 ```
 OrderReceived-GLOBAL
   CheckInventory-RUN
-    InventorySuccess-SUCCESS
-    InventoryFailed-FAILED
+    CheckInventory-SUCCESS
+    CheckInventory-FAILED
+    InventorySuccess-RUN
+      InventorySuccess-SUCCESS
+      InventoryFailed-FAILED
   ReserveItems-RUN
     ReserveSuccess-SUCCESS
+    ReserveSuccess-FAILED
   ProcessPayment-RUN
     PaymentSuccess-SUCCESS
     PaymentFailed-FAILED
   ShipOrder-RUN
     ShippingConfirmed-SUCCESS
+    ShippingConfirmed-FAILED
 OrderCompleted-GLOBAL
 ```
 
