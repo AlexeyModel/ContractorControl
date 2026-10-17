@@ -164,17 +164,17 @@ OrderReceived-GLOBAL
       InventoryRun-SUCCESS
       InventoryRun-FAILED
   ReserveItems-RUN
-    ReserveSuccess-SUCCESS
+    ReserveItems-SUCCESS
       InventorySuccess-RUN
         InventorySuccess-SUCCESS
         InventorySuccess-FAILED
-    ReserveSuccess-FAILED
+    ReserveItems-FAILED
   ProcessPayment-RUN
-    PaymentSuccess-SUCCESS
-    PaymentFailed-FAILED
+    ProcessPayment-SUCCESS
+    ProcessPayment-FAILED
   ShipOrder-RUN
-    ShippingConfirmed-SUCCESS
-    ShippingConfirmed-FAILED
+    ShipOrder-SUCCESS
+    ShipOrder-FAILED
 OrderCompleted-GLOBAL
 ```
 
