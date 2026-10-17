@@ -160,14 +160,14 @@ OrderReceived-GLOBAL
   CheckInventory-RUN
     CheckInventory-SUCCESS
     CheckInventory-FAILED
-    InventorySuccess1-RUN
-      InventorySuccess1-SUCCESS
-      InventoryFailed1-FAILED
+    InventoryRun-RUN
+      InventoryRun-SUCCESS
+      InventoryRun-FAILED
   ReserveItems-RUN
     ReserveSuccess-SUCCESS
-      InventorySuccess2-RUN
-        InventorySuccess2-SUCCESS
-        InventoryFailed2-FAILED
+      InventorySuccess-RUN
+        InventorySuccess-SUCCESS
+        InventorySuccess-FAILED
     ReserveSuccess-FAILED
   ProcessPayment-RUN
     PaymentSuccess-SUCCESS
